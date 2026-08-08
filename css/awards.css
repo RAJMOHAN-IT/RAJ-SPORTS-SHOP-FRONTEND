@@ -1,0 +1,78 @@
+/*=========================================
+        AWARDS PAGE CUSTOM STYLE
+=========================================*/
+
+/* Hero Banner */
+
+.hero{
+
+    background:
+    linear-gradient(rgba(0,0,0,.65),
+    rgba(0,0,0,.65)),
+    url("../images/hero/awards-banner.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+}
+
+/* Hero Title */
+
+.hero h1{
+
+    color:#FFD700;
+
+    text-shadow:0 0 15px rgba(255,215,0,.6);
+
+}
+
+/* Price */
+
+.price{
+
+    color:#d32f2f;
+
+}
+
+/* Stock Badge */
+
+.stock{
+
+    background:#d4edda;
+
+    color:#155724;
+
+}
+
+/* Trophy Hover */
+
+.product-card:hover{
+
+    transform:translateY(-12px);
+
+    box-shadow:0 18px 35px rgba(255,193,7,.4);
+
+}
+
+/* WhatsApp Button */
+
+#sendWhatsApp{
+
+    background:#25D366;
+
+}
+
+#sendWhatsApp:hover{
+
+    background:#1da851;
+
+}
+
+/* Footer */
+
+footer{
+
+    border-top:4px solid gold;
+
+}

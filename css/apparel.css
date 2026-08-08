@@ -1,0 +1,58 @@
+/* =====================================
+      SPORTS APPAREL PAGE CUSTOM STYLE
+===================================== */
+
+/* Hero Banner */
+
+.hero{
+
+    background:
+    linear-gradient(rgba(0,0,0,.65),
+    rgba(0,0,0,.65)),
+    url("../images/hero/apparel-banner.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+}
+
+/* Price Color */
+
+.price{
+
+    color:#1565c0;
+
+}
+
+/* Product Card Hover */
+
+.product-card:hover{
+
+    transform:translateY(-12px);
+
+}
+
+/* Stock Badge */
+
+.stock{
+
+    background:#d4edda;
+
+    color:#155724;
+
+}
+
+/* WhatsApp Button */
+
+#sendWhatsApp{
+
+    background:#25D366;
+
+}
+
+#sendWhatsApp:hover{
+
+    background:#1da851;
+
+}

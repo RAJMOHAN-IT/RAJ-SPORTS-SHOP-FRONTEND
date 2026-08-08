@@ -1,0 +1,810 @@
+/*========================================
+    GOOGLE FONT & RESET
+=========================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#eef2f7;
+    color:#333;
+}
+
+/*========================================
+            NAVBAR
+=========================================*/
+
+header{
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.navbar{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#0f172a;
+
+    padding:18px 8%;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.2);
+
+}
+
+.logo{
+
+    color:white;
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+.logo i{
+
+    color:#ffb703;
+
+    margin-right:8px;
+
+}
+
+.navbar ul{
+
+    display:flex;
+
+    list-style:none;
+
+    gap:30px;
+
+}
+
+.navbar a{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:17px;
+
+    transition:.3s;
+
+}
+
+.navbar a:hover{
+
+    color:#00d26a;
+
+}
+
+/*========================================
+            HERO
+=========================================*/
+
+.hero{
+
+    height:45vh;
+
+    background:
+
+    linear-gradient(rgba(0,0,0,.65),
+    rgba(0,0,0,.65)),
+
+    url("../images/hero/equipment-banner.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    color:white;
+
+}
+
+.hero h1{
+
+    font-size:55px;
+
+    letter-spacing:2px;
+
+}
+
+.hero p{
+
+    margin-top:15px;
+
+    font-size:20px;
+
+}
+
+/*========================================
+        SEARCH BOX
+=========================================*/
+
+.search-section{
+
+    display:flex;
+
+    justify-content:center;
+
+    padding:40px 20px;
+
+}
+
+#search{
+
+    width:600px;
+
+    max-width:95%;
+
+    padding:16px;
+
+    border-radius:40px;
+
+    border:2px solid #ddd;
+
+    font-size:18px;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+#search:focus{
+
+    border-color:#00c853;
+
+    box-shadow:0 0 10px rgba(0,200,83,.3);
+
+}
+
+/*========================================
+        PRODUCT GRID
+=========================================*/
+
+.products{
+
+    width:90%;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+    gap:35px;
+
+    padding-bottom:70px;
+
+}
+
+/*========================================
+        PRODUCT CARD
+=========================================*/
+
+.product-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+
+    transition:.35s;
+
+    text-align:center;
+
+    padding-bottom:25px;
+
+}
+
+.product-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.2);
+
+}
+
+/*========================================
+        PRODUCT IMAGE
+=========================================*/
+
+.product-card img{
+
+    width:100%;
+
+    height:240px;
+
+    object-fit:cover;
+
+    background:#f3f3f3;
+
+}
+
+/*========================================
+        PRODUCT NAME
+=========================================*/
+
+.product-card h3{
+
+    margin-top:18px;
+
+    font-size:24px;
+
+    color:#222;
+
+}
+
+/*========================================
+        PRICE
+=========================================*/
+
+.price{
+
+    margin-top:10px;
+
+    color:#e53935;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+}
+
+/*========================================
+        STOCK
+=========================================*/
+
+.stock{
+
+    display:inline-block;
+
+    margin-top:12px;
+
+    padding:6px 16px;
+
+    border-radius:25px;
+
+    background:#d4edda;
+
+    color:#155724;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+/*========================================
+        QUANTITY
+=========================================*/
+
+.quantity{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-top:25px;
+
+}
+
+.quantity button{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#00c853;
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.quantity button:hover{
+
+    background:#ff9800;
+
+}
+
+.quantity span{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    min-width:25px;
+
+}
+
+/*========================================
+      DISCOUNT BADGE
+=========================================*/
+
+.offer{
+
+    position:absolute;
+
+    top:15px;
+
+    left:15px;
+
+    background:#ff3d00;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+}
+
+/*========================================
+    PRODUCT RATING
+=========================================*/
+
+.rating{
+
+    margin-top:12px;
+
+    color:#ffc107;
+
+    font-size:18px;
+
+}
+
+/*========================================
+        CART SECTION
+=========================================*/
+
+.cart-section{
+
+    width:90%;
+
+    max-width:900px;
+
+    margin:60px auto;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+
+}
+
+.cart-section h2{
+
+    text-align:center;
+
+    color:#0f172a;
+
+    margin-bottom:30px;
+
+    font-size:35px;
+
+}
+
+#cartItems{
+
+    min-height:120px;
+
+    border:2px dashed #ccc;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    margin-bottom:25px;
+
+    font-size:18px;
+
+    line-height:2;
+
+    background:#fafafa;
+
+}
+
+.cart-section h3{
+
+    text-align:right;
+
+    margin-bottom:25px;
+
+    font-size:26px;
+
+    color:#e53935;
+
+}
+
+#totalItems{
+
+    color:#00c853;
+
+}
+
+/*========================================
+      WHATSAPP BUTTON
+=========================================*/
+
+#sendWhatsApp{
+
+    width:100%;
+
+    border:none;
+
+    background:#25D366;
+
+    color:white;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:22px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+#sendWhatsApp i{
+
+    margin-right:12px;
+
+    font-size:24px;
+
+}
+
+#sendWhatsApp:hover{
+
+    background:#1da851;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 12px 25px rgba(37,211,102,.35);
+
+}
+
+/*========================================
+          FOOTER
+=========================================*/
+
+footer{
+
+    background:#0f172a;
+
+    color:white;
+
+    text-align:center;
+
+    padding:50px 20px;
+
+    margin-top:70px;
+
+}
+
+footer h2{
+
+    margin-bottom:15px;
+
+    font-size:32px;
+
+}
+
+footer p{
+
+    margin:10px 0;
+
+    color:#ddd;
+
+    line-height:1.7;
+
+}
+
+/*========================================
+      SCROLLBAR
+=========================================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#ececec;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#00c853;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#ff9800;
+
+}
+
+/*========================================
+        ANIMATIONS
+=========================================*/
+
+.product-card{
+
+    animation:fadeUp .7s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(30px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.hero h1{
+
+    animation:zoomIn 1s ease;
+
+}
+
+@keyframes zoomIn{
+
+    from{
+
+        transform:scale(.8);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+}
+
+/*========================================
+      ACTIVE NAV LINK
+=========================================*/
+
+.navbar a.active{
+
+    color:#00c853;
+
+    border-bottom:2px solid #00c853;
+
+    padding-bottom:4px;
+
+}
+
+/*========================================
+        RESPONSIVE
+=========================================*/
+
+@media(max-width:992px){
+
+.products{
+
+grid-template-columns:
+repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:768px){
+
+.hero{
+
+height:35vh;
+
+}
+
+.hero h1{
+
+font-size:36px;
+
+}
+
+.hero p{
+
+font-size:17px;
+
+}
+
+.navbar{
+
+flex-direction:column;
+
+gap:18px;
+
+padding:15px;
+
+}
+
+.navbar ul{
+
+flex-wrap:wrap;
+
+justify-content:center;
+
+gap:18px;
+
+}
+
+.products{
+
+grid-template-columns:1fr;
+
+}
+
+.product-card img{
+
+height:220px;
+
+}
+
+.cart-section{
+
+padding:25px;
+
+}
+
+.cart-section h2{
+
+font-size:28px;
+
+}
+
+.cart-section h3{
+
+font-size:22px;
+
+}
+
+#sendWhatsApp{
+
+font-size:18px;
+
+padding:16px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.hero h1{
+
+font-size:30px;
+
+}
+
+.hero p{
+
+font-size:15px;
+
+}
+
+#search{
+
+font-size:16px;
+
+padding:14px;
+
+}
+
+.product-card h3{
+
+font-size:20px;
+
+}
+
+.price{
+
+font-size:20px;
+
+}
+
+.quantity button{
+
+width:38px;
+
+height:38px;
+
+font-size:20px;
+
+}
+
+.quantity span{
+
+font-size:20px;
+
+}
+
+footer h2{
+
+font-size:24px;
+
+}
+
+footer p{
+
+font-size:14px;
+
+}
+
+}

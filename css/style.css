@@ -1,0 +1,528 @@
+/* ==============================
+   GOOGLE FONT
+================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#f5f7fa;
+    color:#333;
+}
+
+/* ==============================
+   NAVBAR
+================================= */
+
+header{
+    position:fixed;
+    width:100%;
+    top:0;
+    left:0;
+    z-index:1000;
+}
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:13px 8%;
+    background:rgba(0,0,0,.75);
+    backdrop-filter:blur(8px);
+}
+/*==============================
+        RSA LOGO
+==============================*/
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    cursor:pointer;
+
+}
+
+/* LOGO IMAGE */
+/* LOGO IMAGE */
+
+.logo img{
+
+    width: 90px;
+    height: 80px;
+
+    object-fit: contain;
+
+    background: transparent;
+
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+
+    transition: .4s ease;
+
+}
+
+.logo:hover img{
+
+    transform: scale(1.08);
+
+}
+
+.logo:hover img{
+
+    transform:scale(1.05);
+
+}
+
+/* BRAND */
+
+.brand{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    margin-left:-8px;
+
+}
+/* RSA */
+.brand h2{
+
+    font-size:58px;
+
+    font-weight:900;
+
+    letter-spacing:4px;
+
+    background:linear-gradient(
+        to bottom,
+        #ffffff,
+        #d9d9d9,
+        #8d8d8d,
+        #ffffff
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+    text-shadow:
+        3px 3px 5px rgba(0,0,0,.35);
+
+}
+/* Raj Sports Academy */
+.brand p{
+
+    margin-top:-10px;   /* Reduce the gap */
+
+    color:#cfcfcf;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    letter-spacing:4px;
+
+    text-transform:uppercase;
+
+    line-height:1;
+
+}
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:white;
+    font-weight:500;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:#00ff84;
+}
+
+/* ==============================
+   HERO SECTION
+================================= */
+
+.hero{
+
+    height:100vh;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,.72),
+        rgba(0,0,0,.72)
+    ),
+    url("../images/hero/equipment-img.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+}
+.hero h1{
+
+    font-size:82px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:5px;
+
+    background:linear-gradient(
+    90deg,
+    #ff3d00,
+    #ff9800,
+    #00b0ff,
+    #00e676,
+    #ffeb3b,
+    #ff3d00);
+
+    background-size:400%;
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    animation:rainbowFlow 6s linear infinite;
+}
+@keyframes rainbowFlow{
+
+0%{
+background-position:0%;
+}
+
+100%{
+background-position:400%;
+}
+
+}
+.hero p{
+
+    font-size:28px;
+
+    color:#f8f8f8;
+
+    font-weight:500;
+
+    text-shadow:
+        2px 2px 8px rgba(0,0,0,.8);
+
+    margin-bottom:40px;
+
+}
+.hero-btn{
+
+    display:inline-block;
+
+    background:#00c853;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-size:20px;
+
+    font-weight:600;
+
+    padding:18px 45px;
+
+    border-radius:50px;
+
+    box-shadow:0 8px 20px rgba(0,200,83,.45);
+
+    transition:.35s;
+
+}
+
+.hero-btn:hover{
+
+    background:#ff9800;
+
+    transform:translateY(-5px);
+
+}
+
+/* ==============================
+   COMMON TITLE
+================================= */
+
+section{
+    padding:90px 10%;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-title h2{
+    font-size:40px;
+}
+
+.line{
+    width:90px;
+    height:5px;
+    background:#00c853;
+    margin:15px auto;
+    border-radius:30px;
+}
+
+/* ==============================
+   ABOUT
+================================= */
+
+.about-content{
+    max-width:950px;
+    margin:auto;
+}
+
+.about-content p{
+    text-align:center;
+    line-height:1.9;
+    font-size:18px;
+}
+
+/* ==============================
+   CATEGORY
+================================= */
+
+.card-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:35px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:35px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+    transition:.4s;
+}
+
+.card:hover{
+    transform:translateY(-15px);
+}
+
+/* ==============================
+   CARD IMAGE
+================================= */
+
+.card-image{
+
+    width:120px;
+
+    height:120px;
+
+    margin:auto;
+
+    margin-bottom:25px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.card-image img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:contain;
+
+    transition:.4s;
+
+}
+
+.card:hover .card-image img{
+
+    transform:scale(1.1);
+
+}
+
+.card h3{
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+.card p{
+    line-height:1.8;
+    margin-bottom:30px;
+}
+
+.card-btn{
+    display:inline-block;
+    text-decoration:none;
+    background:#ff9800;
+    color:white;
+    padding:12px 30px;
+    border-radius:35px;
+    transition:.3s;
+}
+
+.card-btn:hover{
+    background:#00c853;
+}
+
+/* ==============================
+   ADDRESS
+================================= */
+
+.address{
+    background:#0f172a;
+    color:white;
+}
+
+.address-box{
+    width:500px;
+    max-width:95%;
+    margin:auto;
+    text-align:center;
+    background:white;
+    color:#222;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.address-box i{
+    color:#ff3d00;
+    font-size:55px;
+    margin-bottom:20px;
+}
+
+.address-box h3{
+    font-size:30px;
+    margin-bottom:20px;
+}
+
+.address-box p{
+    margin:10px 0;
+    font-size:18px;
+}
+
+.location-btn{
+    margin-top:25px;
+    border:none;
+    background:#00c853;
+    color:white;
+    padding:14px 35px;
+    border-radius:30px;
+    cursor:pointer;
+    font-size:17px;
+    transition:.3s;
+}
+
+.location-btn:hover{
+    background:#ff9800;
+}
+
+/* ==============================
+   FOOTER
+================================= */
+
+footer{
+    background:#000;
+    color:white;
+    text-align:center;
+    padding:40px 10%;
+}
+
+.footer-content h2{
+    margin-bottom:15px;
+}
+
+.footer-content p{
+    margin:12px 0;
+}
+
+.social-icons{
+    margin:25px 0;
+}
+
+.social-icons a{
+    color:white;
+    margin:0 15px;
+    font-size:28px;
+    transition:.3s;
+}
+
+.social-icons a:hover{
+    color:#00c853;
+}
+
+.copyright{
+    margin-top:25px;
+    color:#aaa;
+}
+
+/* ==============================
+   RESPONSIVE
+================================= */
+
+@media(max-width:768px){
+
+.hero h1{
+    font-size:40px;
+}
+
+.hero p{
+    font-size:18px;
+}
+
+.navbar{
+    flex-direction:column;
+    gap:15px;
+}
+
+.nav-links{
+    gap:18px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.section-title h2{
+    font-size:30px;
+}
+
+.card{
+    padding:25px;
+}
+
+.address-box{
+    padding:25px;
+}
+
+}
