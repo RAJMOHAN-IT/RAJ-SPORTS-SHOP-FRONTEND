@@ -1,5 +1,5 @@
 
-const LOGIN_API = "http://localhost:8080/api/admin/login";
+const LOGIN_API = "https://raj-sports-shop.onrender.com/api/admin/login";
 
 const loginForm = document.getElementById("loginForm");
 const loginButton = document.getElementById("loginButton");
