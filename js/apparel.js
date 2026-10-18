@@ -1,5 +1,21 @@
 const API = "https://raj-sports-shop.onrender.com/api/products";
 
+const BACKEND_URL = "https://raj-sports-shop.onrender.com";
+
+function getFullImageUrl(url) {
+    if (!url) return "";
+    // If it's already a full http/https link, use it directly
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+        // Fix any old localhost URLs saved in the database
+        if (url.includes("localhost:8080")) {
+            return url.replace("http://localhost:8080", BACKEND_URL);
+        }
+        return url;
+    }
+    // If it's a relative path like "/uploads/img.jpg" or "uploads/img.jpg"
+    return url.startsWith("/") ? BACKEND_URL + url : BACKEND_URL + "/" + url;
+}
+
 let products = [];
 let quantities = [];
 
@@ -44,7 +60,7 @@ function displayProducts() {
 
         <div class="product-card">
 
-            <img src="${product.imageUrl}" alt="${product.productName}">
+           <img src="${getFullImageUrl(product.imageUrl)}" alt="${product.productName}">
 
             <h3>${product.productName}</h3>
 
