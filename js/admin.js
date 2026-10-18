@@ -1,6 +1,5 @@
-
-const API = "http://localhost:8080/api/products";
-const UPLOAD_API = "http://localhost:8080/api/upload";
+const API = "https://raj-sports-shop.onrender.com/api/products";
+const UPLOAD_API = "https://raj-sports-shop.onrender.com/api/upload";
 
 let editingId = null;
 
