@@ -7,42 +7,42 @@ const BACKEND_URL = "https://raj-sports-shop.onrender.com";
 
 function getFullImageUrl(url) {
     if (!url) return "";
-    // If it's already a full http/https link, use it directly
     if (url.startsWith("http://") || url.startsWith("https://")) {
-        // Fix any old localhost URLs saved in the database
         if (url.includes("localhost:8080")) {
             return url.replace("http://localhost:8080", BACKEND_URL);
         }
         return url;
     }
-    // If it's a relative path like "/uploads/img.jpg" or "uploads/img.jpg"
     return url.startsWith("/") ? BACKEND_URL + url : BACKEND_URL + "/" + url;
 }
-const WHATSAPP_NUMBER = "918825713179"; // <-- put your real WhatsApp number here (with country code, no + or spaces)
 
-let products = [];       // will be filled from the backend
-let quantities = [];     // one quantity per product, same order as "products"
+const WHATSAPP_NUMBER = "918825713179";
+
+let products = [];       
+let quantities = [];     
 
 // ==========================================
 // LOAD PRODUCTS FROM BACKEND
 // ==========================================
 
 async function loadProducts() {
+    try {
+        const response = await fetch(API);
+        products = await response.json();
+        quantities = new Array(products.length).fill(0);
 
-    const response = await fetch(API);
-    products = await response.json();
-    quantities = new Array(products.length).fill(0);
-
-    renderProductCards();
-    updateCart();
+        renderProductCards();
+        updateCart();
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 // ==========================================
-// RENDER PRODUCT CARDS (replaces hardcoded HTML)
+// RENDER PRODUCT CARDS
 // ==========================================
 
 function renderProductCards() {
-
     const container = document.getElementById("productsContainer");
     container.innerHTML = "";
 
@@ -52,10 +52,9 @@ function renderProductCards() {
     }
 
     products.forEach((product, index) => {
-
         container.innerHTML += `
         <div class="product-card">
-           <img src="${getFullImageUrl(product.imageUrl)}" alt="${product.productName}">
+            <img src="${getFullImageUrl(product.imageUrl)}" alt="${product.productName}">
             <h3>${product.productName}</h3>
             <p class="price">₹${product.price}</p>
             <p class="stock">In Stock</p>
@@ -92,7 +91,6 @@ function decrease(index) {
 // ==========================================
 
 function updateCart() {
-
     let cart = document.getElementById("cartItems");
     let total = document.getElementById("totalItems");
 
@@ -116,11 +114,10 @@ function updateCart() {
 }
 
 // ==========================================
-// SEARCH (filters the cards already on screen)
+// SEARCH
 // ==========================================
 
 document.getElementById("search").addEventListener("keyup", function () {
-
     const value = this.value.toLowerCase();
     const cards = document.querySelectorAll(".product-card");
 
@@ -135,7 +132,6 @@ document.getElementById("search").addEventListener("keyup", function () {
 // ==========================================
 
 document.getElementById("sendWhatsApp").addEventListener("click", function () {
-
     let message = "🏆 *RAJ SPORTS SHOP ORDER* %0A%0A";
     let total = 0;
 
@@ -175,5 +171,4 @@ links.forEach(link => {
 
 window.onload = function () {
     loadProducts();
-    console.log("🏆 Welcome to RAJ SPORTS SHOP");
 };

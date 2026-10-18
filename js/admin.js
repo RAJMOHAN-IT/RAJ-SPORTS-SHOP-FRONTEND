@@ -1,5 +1,17 @@
 const API = "https://raj-sports-shop.onrender.com/api/products";
 const UPLOAD_API = "https://raj-sports-shop.onrender.com/api/upload";
+const BACKEND_URL = "https://raj-sports-shop.onrender.com";
+
+function getFullImageUrl(url) {
+    if (!url) return "";
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+        if (url.includes("localhost:8080")) {
+            return url.replace("http://localhost:8080", BACKEND_URL);
+        }
+        return url;
+    }
+    return url.startsWith("/") ? BACKEND_URL + url : BACKEND_URL + "/" + url;
+}
 
 let editingId = null;
 
@@ -9,42 +21,29 @@ const cancelEditBtn = document.getElementById("cancelEditBtn");
 const formTitle = document.getElementById("formTitle");
 const currentImagePreview = document.getElementById("currentImagePreview");
 
-// ==========================
-// ADMIN TOKEN
-// ==========================
 function getAdminToken() {
     const token = localStorage.getItem("adminToken");
-
     if (!token) {
         window.location.replace("login.html");
         return null;
     }
-
     return token;
 }
 
-// Use this header for protected admin requests.
 function getAuthHeaders() {
     const token = getAdminToken();
-
     if (!token) return null;
-
     return {
         "Authorization": "Bearer " + token
     };
 }
 
-// ==========================
-// LOAD PRODUCTS
-// ==========================
 async function loadProducts() {
     try {
         const response = await fetch(API);
-
         if (!response.ok) {
             throw new Error("Failed to load products: " + response.status);
         }
-
         const products = await response.json();
         renderProducts(products);
     } catch (error) {
@@ -53,9 +52,6 @@ async function loadProducts() {
     }
 }
 
-// ==========================
-// RENDER TABLE
-// ==========================
 function renderProducts(products) {
     const table = document.getElementById("productTable");
     table.innerHTML = "";
@@ -73,18 +69,15 @@ function renderProducts(products) {
         <tr>
             <td>${product.id}</td>
             <td>
-                <img src="${product.imageUrl || ''}"
-                     class="table-img" width="60">
+                <img src="${getFullImageUrl(product.imageUrl)}" class="table-img" width="60">
             </td>
             <td>${product.productName}</td>
             <td>${product.category}</td>
             <td>₹${product.price}</td>
             <td>Available</td>
             <td>
-                <button type="button"
-                    onclick="editProduct(${product.id})">Edit</button>
-                <button type="button"
-                    onclick="deleteProduct(${product.id})">Delete</button>
+                <button type="button" onclick="editProduct(${product.id})">Edit</button>
+                <button type="button" onclick="deleteProduct(${product.id})">Delete</button>
             </td>
         </tr>
         `;
@@ -96,9 +89,6 @@ function renderProducts(products) {
     document.getElementById("totalCount").innerText = products.length;
 }
 
-// ==========================
-// ADD / UPDATE PRODUCT
-// ==========================
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -107,14 +97,8 @@ form.addEventListener("submit", async function (e) {
 
     try {
         const imageFile = document.getElementById("image").files[0];
+        let imageUrl = currentImagePreview.src && currentImagePreview.style.display !== "none" ? currentImagePreview.src : "";
 
-        let imageUrl =
-            currentImagePreview.src &&
-            currentImagePreview.style.display !== "none"
-                ? currentImagePreview.src
-                : "";
-
-        // IMAGE UPLOAD — ADMIN TOKEN REQUIRED
         if (imageFile) {
             const formData = new FormData();
             formData.append("file", imageFile);
@@ -126,10 +110,7 @@ form.addEventListener("submit", async function (e) {
             });
 
             if (!uploadResponse.ok) {
-                alert(
-                    "Image upload failed (status " +
-                    uploadResponse.status + "). Product was not saved."
-                );
+                alert("Image upload failed (status " + uploadResponse.status + "). Product was not saved.");
                 return;
             }
 
@@ -151,8 +132,6 @@ form.addEventListener("submit", async function (e) {
         };
 
         let response;
-
-        // ADD PRODUCT — ADMIN TOKEN REQUIRED
         if (editingId === null) {
             response = await fetch(API, {
                 method: "POST",
@@ -164,16 +143,11 @@ form.addEventListener("submit", async function (e) {
             });
 
             if (!response.ok) {
-                alert(
-                    "Product was not added. Server status: " +
-                    response.status
-                );
+                alert("Product was not added. Server status: " + response.status);
                 return;
             }
-
             alert("Product Added");
         } else {
-            // UPDATE PRODUCT — ADMIN TOKEN REQUIRED
             response = await fetch(API + "/" + editingId, {
                 method: "PUT",
                 headers: {
@@ -184,13 +158,9 @@ form.addEventListener("submit", async function (e) {
             });
 
             if (!response.ok) {
-                alert(
-                    "Product was not updated. Server status: " +
-                    response.status
-                );
+                alert("Product was not updated. Server status: " + response.status);
                 return;
             }
-
             alert("Product Updated");
             resetFormToAddMode();
         }
@@ -205,12 +175,8 @@ form.addEventListener("submit", async function (e) {
     }
 });
 
-// ==========================
-// DELETE PRODUCT
-// ==========================
 async function deleteProduct(id) {
     if (!confirm("Delete Product?")) return;
-
     const authHeaders = getAuthHeaders();
     if (!authHeaders) return;
 
@@ -227,27 +193,21 @@ async function deleteProduct(id) {
 
         alert("Product Deleted");
         await loadProducts();
-
     } catch (error) {
         console.error(error);
         alert("Could not delete product. Check the backend connection.");
     }
 }
 
-// ==========================
-// EDIT PRODUCT
-// ==========================
 async function editProduct(id) {
     try {
         const response = await fetch(API + "/" + id);
-
         if (!response.ok) {
             alert("Could not load product. Server status: " + response.status);
             return;
         }
 
         const product = await response.json();
-
         editingId = id;
 
         document.getElementById("productName").value = product.productName;
@@ -256,17 +216,15 @@ async function editProduct(id) {
         document.getElementById("description").value = product.description;
 
         if (product.imageUrl) {
-            currentImagePreview.src = product.imageUrl;
+            currentImagePreview.src = getFullImageUrl(product.imageUrl);
             currentImagePreview.style.display = "inline-block";
         } else {
             currentImagePreview.style.display = "none";
         }
 
         formTitle.innerText = "Edit Product";
-        submitBtn.innerHTML =
-            '<i class="fas fa-check-circle"></i> Update Product';
+        submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Update Product';
         cancelEditBtn.style.display = "inline-block";
-
         window.scrollTo({ top: 0, behavior: "smooth" });
 
     } catch (error) {
@@ -275,14 +233,10 @@ async function editProduct(id) {
     }
 }
 
-// ==========================
-// RESET FORM
-// ==========================
 function resetFormToAddMode() {
     editingId = null;
     formTitle.innerText = "Add New Product";
-    submitBtn.innerHTML =
-        '<i class="fas fa-plus-circle"></i> Add Product';
+    submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Product';
     cancelEditBtn.style.display = "none";
     currentImagePreview.style.display = "none";
 }
@@ -292,67 +246,42 @@ cancelEditBtn.addEventListener("click", function () {
     resetFormToAddMode();
 });
 
-// ==========================
-// SEARCH
-// ==========================
 document.getElementById("searchBox").addEventListener("keyup", async function () {
     const keyword = this.value.trim();
-
     if (keyword === "") {
         await loadProducts();
         return;
     }
 
     try {
-        const response = await fetch(
-            API + "/search?keyword=" + encodeURIComponent(keyword)
-        );
-
-        if (!response.ok) {
-            throw new Error("Search failed: " + response.status);
-        }
-
+        const response = await fetch(API + "/search?keyword=" + encodeURIComponent(keyword));
+        if (!response.ok) throw new Error("Search failed: " + response.status);
         const products = await response.json();
         renderProducts(products);
-
     } catch (error) {
         console.error(error);
         alert("Product search failed.");
     }
 });
 
-// ==========================
-// CATEGORY FILTER
-// ==========================
 document.getElementById("filterCategory").addEventListener("change", async function () {
     const category = this.value;
-
     if (category === "All") {
         await loadProducts();
         return;
     }
 
     try {
-        const response = await fetch(
-            API + "/category/" + encodeURIComponent(category)
-        );
-
-        if (!response.ok) {
-            throw new Error("Category filter failed: " + response.status);
-        }
-
+        const response = await fetch(API + "/category/" + encodeURIComponent(category));
+        if (!response.ok) throw new Error("Category filter failed: " + response.status);
         const products = await response.json();
         renderProducts(products);
-
     } catch (error) {
         console.error(error);
         alert("Could not filter products.");
     }
 });
 
-// ==========================
-// PAGE LOAD
-// ==========================
 window.onload = function () {
     if (!getAdminToken()) return;
     loadProducts();
