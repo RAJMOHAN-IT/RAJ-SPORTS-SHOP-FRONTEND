@@ -258,6 +258,12 @@
 
 <!-- ================= JAVASCRIPT ================= -->
 
+<script>
+    if (!localStorage.getItem("adminToken")) {
+        window.location.replace("login.html");
+    }
+</script>
+
 <script src="js/admin.js"></script>
 
 </body>

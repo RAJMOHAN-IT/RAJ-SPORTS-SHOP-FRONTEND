@@ -1,3 +1,4 @@
+
 const API = "http://localhost:8080/api/products";
 const UPLOAD_API = "http://localhost:8080/api/upload";
 
@@ -10,19 +11,53 @@ const formTitle = document.getElementById("formTitle");
 const currentImagePreview = document.getElementById("currentImagePreview");
 
 // ==========================
+// ADMIN TOKEN
+// ==========================
+function getAdminToken() {
+    const token = localStorage.getItem("adminToken");
+
+    if (!token) {
+        window.location.replace("login.html");
+        return null;
+    }
+
+    return token;
+}
+
+// Use this header for protected admin requests.
+function getAuthHeaders() {
+    const token = getAdminToken();
+
+    if (!token) return null;
+
+    return {
+        "Authorization": "Bearer " + token
+    };
+}
+
+// ==========================
 // LOAD PRODUCTS
 // ==========================
 async function loadProducts() {
-    const response = await fetch(API);
-    const products = await response.json();
-    renderProducts(products);
+    try {
+        const response = await fetch(API);
+
+        if (!response.ok) {
+            throw new Error("Failed to load products: " + response.status);
+        }
+
+        const products = await response.json();
+        renderProducts(products);
+    } catch (error) {
+        console.error(error);
+        alert("Could not load products. Check that the backend is running.");
+    }
 }
 
 // ==========================
 // RENDER TABLE
 // ==========================
 function renderProducts(products) {
-
     const table = document.getElementById("productTable");
     table.innerHTML = "";
 
@@ -31,7 +66,6 @@ function renderProducts(products) {
     let awards = 0;
 
     products.forEach(product => {
-
         if (product.category === "Equipment") equipment++;
         else if (product.category === "Sports Apparel") apparel++;
         else awards++;
@@ -39,14 +73,19 @@ function renderProducts(products) {
         table.innerHTML += `
         <tr>
             <td>${product.id}</td>
-            <td><img src="${product.imageUrl || ''}" class="table-img" width="60"></td>
+            <td>
+                <img src="${product.imageUrl || ''}"
+                     class="table-img" width="60">
+            </td>
             <td>${product.productName}</td>
             <td>${product.category}</td>
             <td>₹${product.price}</td>
             <td>Available</td>
             <td>
-                <button type="button" onclick="editProduct(${product.id})">Edit</button>
-                <button type="button" onclick="deleteProduct(${product.id})">Delete</button>
+                <button type="button"
+                    onclick="editProduct(${product.id})">Edit</button>
+                <button type="button"
+                    onclick="deleteProduct(${product.id})">Delete</button>
             </td>
         </tr>
         `;
@@ -62,143 +101,189 @@ function renderProducts(products) {
 // ADD / UPDATE PRODUCT
 // ==========================
 form.addEventListener("submit", async function (e) {
-
     e.preventDefault();
 
-    const imageFile = document.getElementById("image").files[0];
+    const authHeaders = getAuthHeaders();
+    if (!authHeaders) return;
 
-    let imageUrl = currentImagePreview.src && currentImagePreview.style.display !== "none"
-        ? currentImagePreview.src
-        : "";
+    try {
+        const imageFile = document.getElementById("image").files[0];
 
-    if (imageFile) {
+        let imageUrl =
+            currentImagePreview.src &&
+            currentImagePreview.style.display !== "none"
+                ? currentImagePreview.src
+                : "";
 
-        const formData = new FormData();
-        formData.append("file", imageFile);
+        // IMAGE UPLOAD — ADMIN TOKEN REQUIRED
+        if (imageFile) {
+            const formData = new FormData();
+            formData.append("file", imageFile);
 
-        const uploadResponse = await fetch(UPLOAD_API, {
-            method: "POST",
-            body: formData
-        });
+            const uploadResponse = await fetch(UPLOAD_API, {
+                method: "POST",
+                headers: authHeaders,
+                body: formData
+            });
 
-        if (!uploadResponse.ok) {
-            alert("❌ Image upload failed (status " + uploadResponse.status + "). Product was NOT saved. Please try again.");
+            if (!uploadResponse.ok) {
+                alert(
+                    "Image upload failed (status " +
+                    uploadResponse.status + "). Product was not saved."
+                );
+                return;
+            }
+
+            imageUrl = await uploadResponse.text();
+        }
+
+        if (!imageUrl && editingId === null) {
+            alert("Please choose a product photo.");
             return;
         }
 
-        imageUrl = await uploadResponse.text();
-    }
+        const product = {
+            productName: document.getElementById("productName").value,
+            price: parseFloat(document.getElementById("price").value),
+            category: document.getElementById("category").value,
+            description: document.getElementById("description").value,
+            imageUrl: imageUrl,
+            stock: 100
+        };
 
-    if (!imageUrl && editingId === null) {
-        alert("Please choose a product photo.");
-        return;
-    }
+        let response;
 
-    const product = {
-    productName: document.getElementById("productName").value,
-    price: parseFloat(document.getElementById("price").value),
-    category: document.getElementById("category").value,
-    description: document.getElementById("description").value,
-    imageUrl: imageUrl,
-    stock: 100
-};
+        // ADD PRODUCT — ADMIN TOKEN REQUIRED
+        if (editingId === null) {
+            response = await fetch(API, {
+                method: "POST",
+                headers: {
+                    ...authHeaders,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(product)
+            });
 
-    let response;
+            if (!response.ok) {
+                alert(
+                    "Product was not added. Server status: " +
+                    response.status
+                );
+                return;
+            }
 
-    if (editingId === null) {
+            alert("Product Added");
+        } else {
+            // UPDATE PRODUCT — ADMIN TOKEN REQUIRED
+            response = await fetch(API + "/" + editingId, {
+                method: "PUT",
+                headers: {
+                    ...authHeaders,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(product)
+            });
 
-        response = await fetch(API, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(product)
-        });
+            if (!response.ok) {
+                alert(
+                    "Product was not updated. Server status: " +
+                    response.status
+                );
+                return;
+            }
 
-        if (!response.ok) {
-            alert("❌ Product was NOT added. Server said: " + response.status + " " + response.statusText);
-            return;
+            alert("Product Updated");
+            resetFormToAddMode();
         }
 
-        alert("✅ Product Added");
+        form.reset();
+        currentImagePreview.style.display = "none";
+        await loadProducts();
 
-    } else {
-
-        response = await fetch(API + "/" + editingId, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(product)
-        });
-
-        if (!response.ok) {
-            alert("❌ Product was NOT updated. Server said: " + response.status + " " + response.statusText);
-            return;
-        }
-
-        alert("✅ Product Updated");
-
-        resetFormToAddMode();
+    } catch (error) {
+        console.error(error);
+        alert("Request failed. Check the backend connection.");
     }
-
-    form.reset();
-    currentImagePreview.style.display = "none";
-    loadProducts();
 });
 
 // ==========================
-// DELETE
+// DELETE PRODUCT
 // ==========================
 async function deleteProduct(id) {
-    if (confirm("Delete Product?")) {
+    if (!confirm("Delete Product?")) return;
 
-        const response = await fetch(API + "/" + id, { method: "DELETE" });
+    const authHeaders = getAuthHeaders();
+    if (!authHeaders) return;
+
+    try {
+        const response = await fetch(API + "/" + id, {
+            method: "DELETE",
+            headers: authHeaders
+        });
 
         if (!response.ok) {
-            alert("❌ Delete failed. Server said: " + response.status);
+            alert("Delete failed. Server status: " + response.status);
             return;
         }
 
-        loadProducts();
+        alert("Product Deleted");
+        await loadProducts();
+
+    } catch (error) {
+        console.error(error);
+        alert("Could not delete product. Check the backend connection.");
     }
 }
 
 // ==========================
-// EDIT
+// EDIT PRODUCT
 // ==========================
 async function editProduct(id) {
+    try {
+        const response = await fetch(API + "/" + id);
 
-    const response = await fetch(API + "/" + id);
+        if (!response.ok) {
+            alert("Could not load product. Server status: " + response.status);
+            return;
+        }
 
-    if (!response.ok) {
-        alert("❌ Could not load product for editing. Server said: " + response.status);
-        return;
+        const product = await response.json();
+
+        editingId = id;
+
+        document.getElementById("productName").value = product.productName;
+        document.getElementById("price").value = product.price;
+        document.getElementById("category").value = product.category;
+        document.getElementById("description").value = product.description;
+
+        if (product.imageUrl) {
+            currentImagePreview.src = product.imageUrl;
+            currentImagePreview.style.display = "inline-block";
+        } else {
+            currentImagePreview.style.display = "none";
+        }
+
+        formTitle.innerText = "Edit Product";
+        submitBtn.innerHTML =
+            '<i class="fas fa-check-circle"></i> Update Product';
+        cancelEditBtn.style.display = "inline-block";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+    } catch (error) {
+        console.error(error);
+        alert("Could not load product. Check the backend connection.");
     }
-
-    const product = await response.json();
-
-    editingId = id;
-
-    document.getElementById("productName").value = product.productName;
-    document.getElementById("price").value = product.price;
-    document.getElementById("category").value = product.category;
-    document.getElementById("description").value = product.description;
-
-    if (product.imageUrl) {
-        currentImagePreview.src = product.imageUrl;
-        currentImagePreview.style.display = "inline-block";
-    } else {
-        currentImagePreview.style.display = "none";
-    }
-
-    formTitle.innerText = "Edit Product";
-    submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Update Product';
-    cancelEditBtn.style.display = "inline-block";
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// ==========================
+// RESET FORM
+// ==========================
 function resetFormToAddMode() {
     editingId = null;
     formTitle.innerText = "Add New Product";
-    submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Product';
+    submitBtn.innerHTML =
+        '<i class="fas fa-plus-circle"></i> Add Product';
     cancelEditBtn.style.display = "none";
     currentImagePreview.style.display = "none";
 }
@@ -212,37 +297,64 @@ cancelEditBtn.addEventListener("click", function () {
 // SEARCH
 // ==========================
 document.getElementById("searchBox").addEventListener("keyup", async function () {
-
-    const keyword = this.value;
+    const keyword = this.value.trim();
 
     if (keyword === "") {
-        loadProducts();
+        await loadProducts();
         return;
     }
 
-    const response = await fetch(API + "/search?keyword=" + keyword);
-    const products = await response.json();
-    renderProducts(products);
+    try {
+        const response = await fetch(
+            API + "/search?keyword=" + encodeURIComponent(keyword)
+        );
+
+        if (!response.ok) {
+            throw new Error("Search failed: " + response.status);
+        }
+
+        const products = await response.json();
+        renderProducts(products);
+
+    } catch (error) {
+        console.error(error);
+        alert("Product search failed.");
+    }
 });
 
 // ==========================
 // CATEGORY FILTER
 // ==========================
 document.getElementById("filterCategory").addEventListener("change", async function () {
-
     const category = this.value;
 
     if (category === "All") {
-        loadProducts();
+        await loadProducts();
         return;
     }
 
-    const response = await fetch(API + "/category/" + category);
-    const products = await response.json();
-    renderProducts(products);
+    try {
+        const response = await fetch(
+            API + "/category/" + encodeURIComponent(category)
+        );
+
+        if (!response.ok) {
+            throw new Error("Category filter failed: " + response.status);
+        }
+
+        const products = await response.json();
+        renderProducts(products);
+
+    } catch (error) {
+        console.error(error);
+        alert("Could not filter products.");
+    }
 });
 
 // ==========================
 // PAGE LOAD
 // ==========================
-window.onload = loadProducts;
+window.onload = function () {
+    if (!getAdminToken()) return;
+    loadProducts();
+};
