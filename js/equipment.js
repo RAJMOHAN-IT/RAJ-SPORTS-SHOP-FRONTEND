@@ -2,7 +2,7 @@
 // CONFIG
 // ==========================================
 
-const API = "http://localhost:8080/api/products/category/Equipment";
+const API = "https://raj-sports-shop.onrender.com/api/products/category/Equipment";
 const WHATSAPP_NUMBER = "918825713179"; // <-- put your real WhatsApp number here (with country code, no + or spaces)
 
 let products = [];       // will be filled from the backend

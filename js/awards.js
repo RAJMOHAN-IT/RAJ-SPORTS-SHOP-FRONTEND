@@ -1,4 +1,4 @@
-const API = "http://localhost:8080/api/products";
+const API = "https://raj-sports-shop.onrender.com/api/products";
 
 let products = [];
 let quantities = [];
